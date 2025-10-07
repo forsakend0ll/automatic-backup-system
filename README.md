@@ -1,76 +1,92 @@
-# Automatic Backup System – AWS Project
+# Automatic Backup System – AWS Lambda & S3
 
-## Overview
-The **Automatic Backup System** is a serverless AWS project that automatically backs up data daily across multiple S3 buckets.  
-It demonstrates **automation, cost optimization, and event-driven architecture** using AWS Lambda, EventBridge (CloudWatch Scheduler), S3 Lifecycle Rules, and optional SNS notifications.
-
----
-
-## Problem Statement
-Managing backups manually is time-consuming and prone to human error.  
-This project automates backup creation, ensures **versioning**, and applies **lifecycle rules** to optimize storage costs.
+This project demonstrates how to build an **automated backup system** using AWS services under the **Free Tier**.  
+It includes **daily backups**, **versioning**, **lifecycle rules for cost optimization**, and **optional notifications** via SNS.
 
 ---
 
-## Architecture
+## Architecture Overview
 
 ![Architecture Diagram](images/architecture-diagram.gif)
 
+---
+
+## Deployed Backup System Preview
+The system automatically uploads timestamped backup files to **three S3 buckets**:  
+
+- `documents-backup-cloudwithpaula`  
+- `photos-backup-cloudwithpaula`  
+- `database-backup-cloudwithpaula`  
+
+Example:  
+A backup file `backup_2025-10-08_14-45-08.txt` uploaded automatically by Lambda.
 
 ---
 
-## Workflow Summary
-1. **EventBridge (CloudWatch Scheduler)** triggers the **AutoBackupUploader Lambda** every 24 hours (`rate(1 day)`).
-2. **Lambda** generates a timestamped backup file (simulated `.txt`) and uploads it to three S3 buckets:
-   - `documents-backup-cloudwithpaula`
-   - `photos-backup-cloudwithpaula`
-   - `database-backup-cloudwithpaula`
-3. Each bucket has:
-   - **Versioning enabled** to preserve file history  
-   - **Lifecycle rules** to move older files into **Glacier Flexible Retrieval** or **Deep Archive** for cost optimization  
-4. **SNS (optional)** sends an alert when backups succeed or fail.  
-5. This process repeats automatically every day.
+## AWS Services Used
+
+- **AWS Lambda** – Runs Python script (`AutoBackupUploader`) to create and upload backup files  
+- **Amazon S3** – Stores backup files with versioning and lifecycle rules for Glacier/Deep Archive  
+- **Amazon EventBridge (CloudWatch Scheduler)** – Triggers the Lambda function on a daily schedule  
+- **Amazon SNS (optional)** – Sends notifications when backups succeed or fail  
+- **CloudWatch Logs** – Monitors Lambda execution and logs any errors  
+
+---
+
+## Example Backup Behavior
+
+- Daily scheduled backup triggered at **00:00 UTC** (or configured time)  
+- Each bucket has **versioning** enabled to preserve file history  
+- Lifecycle rules automatically move files to **Glacier Flexible Retrieval** or **Deep Archive** after configured days:  
+  - Documents: Glacier after 30 days, Deep Archive after 180 days  
+  - Photos: Glacier after 30 days, Deep Archive after 180 days  
+  - Database: Glacier after 7 days  
+
+---
+
+## Step-by-Step Setup Summary
+
+### 1️⃣ Create S3 Buckets
+- Create three buckets for `documents`, `photos`, and `database`  
+- Enable **versioning**  
+- Configure **lifecycle rules** to move older backups to Glacier/Deep Archive  
+
+### 2️⃣ Create Lambda Function
+- Runtime: **Python 3.12**  
+- Attach IAM role with **S3 write access**  
+- Add the `AutoBackupUploader` Python script to upload backup files to all three buckets  
+
+### 3️⃣ Create EventBridge Rule
+- Schedule type: **Rate-based schedule**  
+- Frequency: **1 day**  
+- Target: **AutoBackupUploader Lambda**  
+- Enables automated daily backups  
+
+### 4️⃣ (Optional) SNS Notifications
+- Configure Lambda to send success/failure alerts via SNS  
+
+### 5️⃣ Test & Verify
+- Run Lambda manually via **“Test”** to confirm files are uploaded to all three buckets  
+- Monitor execution and logs in **CloudWatch**
 
 ---
 
 ## Design Decisions
-- **Daily Backup (1-day schedule):**  
-  - Chosen to balance automation and cost-efficiency  
-  - Ensures data is backed up regularly without creating excessive S3 storage or Lambda executions  
-  - Fits naturally with S3 lifecycle transitions (Glacier/Deep Archive)  
-  - Simulates realistic business backup frequency for a portfolio/demo  
 
-- **Lifecycle rules:** Move old files to Glacier or Deep Archive to reduce costs while retaining historical data.  
-
-- **SNS notifications:** Optional, to demonstrate event-driven alerting in a complete AWS architecture.
+- **Daily backup schedule:** Balances automation with cost-efficiency and ensures consistent backup without excessive S3/Lambda usage  
+- **Lifecycle rules:** Automatically moves older backups to Glacier/Deep Archive for storage cost optimization  
+- **SNS notifications:** Optional feature to demonstrate event-driven alerting  
+- **Versioning enabled:** Ensures historical backups are preserved and not accidentally overwritten  
 
 ---
 
-## Setup Instructions
+## Repository Structure
 
-### Prerequisites
-- AWS account
-- IAM user with permissions: Lambda, S3, EventBridge, SNS
-- Python 3.12+ (for Lambda)
-
-### Steps
-1. Create three S3 buckets for `documents`, `photos`, and `database` backups.  
-2. Enable **versioning** and configure **lifecycle rules**:
-   - Documents: Glacier after 30 days, Deep Archive after 180 days  
-   - Photos: Glacier after 30 days, Deep Archive after 180 days  
-   - Database: Glacier after 7 days  
-3. Create a Lambda function (`AutoBackupUploader`) in AWS:
-   - Runtime: Python 3.12  
-   - Attach IAM role with S3 write access (or AmazonS3FullAccess for demo)  
-   - Add code to upload backup files to all three buckets  
-4. Create an EventBridge rule:
-   - Rule type: **Rate-based schedule**  
-   - Rate: `1 day`  
-   - Target: **AutoBackupUploader Lambda**  
-5. (Optional) Configure SNS notifications in Lambda to send success/failure alerts.  
-6. Test manually using Lambda → “Test” to confirm backups appear in all three buckets.  
-7. Once confirmed, backups will run automatically daily.
-
----
-
-
+```plaintext
+automatic-backup-system/
+│
+├── README.md                      ← this documentation  
+├── images/
+│   └── architecture-diagram.gif   ← architecture diagram  
+├── lambda_function.py             ← Lambda Python script  
+└── sample-backups/                ← example backup files (optional)
