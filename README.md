@@ -1,7 +1,7 @@
 # Automatic Backup System – AWS Lambda & S3
 
 This project demonstrates how to build an **automated backup system** using AWS services under the **Free Tier**.  
-It includes **daily backups**, **versioning**, **lifecycle rules for cost optimization**, and **optional notifications** via SNS.
+It includes **daily backups**, **versioning**, **lifecycle rules for cost optimization**, and **notifications** via SNS.
 
 ---
 
@@ -28,7 +28,7 @@ A backup file `backup_2025-10-08_14-45-08.txt` uploaded automatically by Lambda.
 - **AWS Lambda** – Runs Python script (`AutoBackupUploader`) to create and upload backup files  
 - **Amazon S3** – Stores backup files with versioning and lifecycle rules for Glacier/Deep Archive  
 - **Amazon EventBridge (CloudWatch Scheduler)** – Triggers the Lambda function on a daily schedule  
-- **Amazon SNS (optional)** – Sends notifications when backups succeed or fail  
+- **Amazon SNS** – Sends notifications when backups succeed or fail  
 - **CloudWatch Logs** – Monitors Lambda execution and logs any errors  
 
 ---
@@ -76,5 +76,23 @@ A backup file `backup_2025-10-08_14-45-08.txt` uploaded automatically by Lambda.
 
 - **Daily backup schedule:** Balances automation with cost-efficiency and ensures consistent backup without excessive S3/Lambda usage.  
 - **Lifecycle rules:** Normally, S3 transitions to **Glacier** or **Deep Archive** after longer periods (30–180 days). For **demonstration purposes**, these transitions are configured to occur after 1 day, allowing the automated backup and cost-optimization behavior to be visible immediately.  
-- **SNS notifications:** Optional feature to demonstrate event-driven alerting.  
-- **Versioning enabled:** Ensures
+- **SNS notifications:** to demonstrate event-driven alerting.  
+- **Versioning enabled:** Ensures historical backups are preserved and not accidentally overwritten.  
+
+---
+
+## Repository Structure
+
+```plaintext
+automatic-backup-system/
+│
+├── README.md                      ← this documentation  
+├── images/
+│   └── architecture-diagram.gif   ← architecture diagram  
+├── lambda_function.py             ← Lambda Python script  
+└── sample-backups/                ← example backup files
+
+---
+### Author
+**Paula Kim**  
+Cloud & AI Enthusiast  
