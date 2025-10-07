@@ -7,7 +7,7 @@ It includes **daily backups**, **versioning**, **lifecycle rules for cost optimi
 
 ## Architecture Overview
 
-![Architecture Diagram](images/architecture-diagram.gif)
+![Architecture Diagram](architecture-diagram.gif)
 
 ---
 
@@ -41,6 +41,7 @@ A backup file `backup_2025-10-08_14-45-08.txt` uploaded automatically by Lambda.
   - Documents: Glacier after 30 days, Deep Archive after 180 days  
   - Photos: Glacier after 30 days, Deep Archive after 180 days  
   - Database: Glacier after 7 days  
+- For **demonstration purposes**, these transitions can be temporarily set to 1 day so the behavior can be observed immediately in the project demo.
 
 ---
 
@@ -73,20 +74,7 @@ A backup file `backup_2025-10-08_14-45-08.txt` uploaded automatically by Lambda.
 
 ## Design Decisions
 
-- **Daily backup schedule:** Balances automation with cost-efficiency and ensures consistent backup without excessive S3/Lambda usage  
-- **Lifecycle rules:** Automatically moves older backups to Glacier/Deep Archive for storage cost optimization  
-- **SNS notifications:** Optional feature to demonstrate event-driven alerting  
-- **Versioning enabled:** Ensures historical backups are preserved and not accidentally overwritten  
-
----
-
-## Repository Structure
-
-```plaintext
-automatic-backup-system/
-│
-├── README.md                      ← this documentation  
-├── images/
-│   └── architecture-diagram.gif   ← architecture diagram  
-├── lambda_function.py             ← Lambda Python script  
-└── sample-backups/                ← example backup files (optional)
+- **Daily backup schedule:** Balances automation with cost-efficiency and ensures consistent backup without excessive S3/Lambda usage.  
+- **Lifecycle rules:** Normally, S3 transitions to **Glacier** or **Deep Archive** after longer periods (30–180 days). For **demonstration purposes**, these transitions are configured to occur after 1 day, allowing the automated backup and cost-optimization behavior to be visible immediately.  
+- **SNS notifications:** Optional feature to demonstrate event-driven alerting.  
+- **Versioning enabled:** Ensures
