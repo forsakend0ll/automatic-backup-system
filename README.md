@@ -83,14 +83,12 @@ A backup file `backup_2025-10-08_14-45-08.txt` uploaded automatically by Lambda.
 
 ## Repository Structure
 
-```plaintext
 automatic-backup-system/
 │
 ├── README.md                      ← this documentation  
-├── images/
-│   └── architecture-diagram.gif   ← architecture diagram  
+├── architecture-diagram.gif       ← architecture diagram 
 ├── lambda_function.py             ← Lambda Python script  
-└── sample-backups/                ← example backup files
+└── sample-backups/                ← example backup files 
 ```
 ---
 ### Author
