@@ -91,7 +91,7 @@ automatic-backup-system/
 │   └── architecture-diagram.gif   ← architecture diagram  
 ├── lambda_function.py             ← Lambda Python script  
 └── sample-backups/                ← example backup files
-
+```
 ---
 ### Author
 **Paula Kim**  
