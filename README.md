@@ -83,6 +83,7 @@ A backup file `backup_2025-10-08_14-45-08.txt` uploaded automatically by Lambda.
 
 ## Repository Structure
 
+```plaintext
 automatic-backup-system/
 │
 ├── README.md                      ← this documentation  
