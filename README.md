@@ -106,7 +106,6 @@ automatic-backup-system/
     └── scr_photo.png
 ```
 ---
-### Author 
----
-**Paula Kim** 
-Cloud & AI Enthusiast
+### Author
+**Paula Kim**  
+Cloud & AI Enthusiast  
